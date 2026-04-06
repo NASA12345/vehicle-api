@@ -1,0 +1,15 @@
+{
+  "name": "nodejs-api",
+  "version": "1.0.0",
+  "description": "Basic backend app",
+  "main": "server.js",
+  "type": "module",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "dependencies": {
+    "dotenv": "^17.2.2",
+    "express": "^4.18.2",
+    "firebase": "^12.2.1"
+  }
+}

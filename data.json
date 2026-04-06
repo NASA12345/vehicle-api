@@ -1,0 +1,11 @@
+{
+    "trailer": [
+          "XX02Q9909", "XX03A3578", "XX03A3614"
+    ],
+    "serviceProviders":[
+        "Airtel", "Jio", "VI", "BSNL"
+    ],
+    "GPSVendor":[
+        "FLEETRADAR"
+    ]
+}
