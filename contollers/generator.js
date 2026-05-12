@@ -44,7 +44,11 @@ export async function generatevehicledata(vehicleId){
     longitude: lng.toFixed(6),
     latitude: lat.toFixed(6),
     heading: Math.floor(Math.random() * 360),
-    speed: 10.0 + Math.floor(Math.random()*90),
+    // realistic vehicle speed in km/h (0.0 - 120.0)
+    speed: (() => {
+      const v = parseFloat((Math.random() * 120).toFixed(1));
+      return v;
+    })(),
     areaCode: "0",
     cellId: "0",
     mcc: "0",
@@ -70,7 +74,12 @@ export async function generatevehicledata(vehicleId){
     maxAccelZ: 0.0,
     locationSource: 1,
     serviceProvider: "Airtel",
-    gpsSpeed: 10.0 + Math.floor(Math.random() * 500)/10,
+    // gpsSpeed follows `speed` with small noise, clamped to 0-140
+    gpsSpeed: (() => {
+      const base = parseFloat((Math.random() * 120).toFixed(1));
+      const noisy = base + (Math.random() - 0.5) * 5; // +/-2.5 km/h
+      return Math.max(0, Math.min(140, parseFloat(noisy.toFixed(1))));
+    })(),
     unplugged: 0,
     gpsOdometer: 55419,
     tilt: 0,
