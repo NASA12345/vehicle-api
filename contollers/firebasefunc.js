@@ -1,7 +1,4 @@
-import { collection} from 'firebase/firestore';
 import { db } from '../fb/config.js';
-
-import { doc, getDoc, setDoc, updateDoc } from 'firebase/firestore';
 
 
 const R = 6371000;
@@ -67,9 +64,9 @@ function chooseRouteForId(id){
 }
 
 export async function getVehiclePosition(vehicleId){
-  const ref = doc(db, 'vehicle', vehicleId);
-  const snap = await getDoc(ref);
-  if (!snap.exists()){
+  const ref = db.collection('vehicle').doc(String(vehicleId));
+  const snap = await ref.get();
+  if (!snap.exists) {
     const path = chooseRouteForId(vehicleId);
     const start = path[0];
     const payload = {
@@ -80,7 +77,7 @@ export async function getVehiclePosition(vehicleId){
       target: path[path.length - 1],
       updatedAt: Date.now()
     };
-    await setDoc(ref, payload);
+    await ref.set(payload);
     return { id: vehicleId, ...payload };
   }
 
@@ -98,7 +95,7 @@ export async function getVehiclePosition(vehicleId){
     if ((index + 1) < path.length - 1) index++;
     // snap to waypoint
     const snapPayload = { lat: nextWaypoint.lat, lng: nextWaypoint.lng, path, pathIndex: index, updatedAt: Date.now() };
-    await updateDoc(ref, snapPayload);
+    await ref.update(snapPayload);
     return { id: vehicleId, ...snapPayload };
   }
 
@@ -106,7 +103,7 @@ export async function getVehiclePosition(vehicleId){
   const brg = bearingBetween(prevPos, nextWaypoint);
   const nextPos = destinationPoint(prevPos, brg, step);
   const out = { lat: nextPos.lat, lng: nextPos.lng, path, pathIndex: index, updatedAt: Date.now(), bearing: brg };
-  await updateDoc(ref, out);
+  await ref.update(out);
   return { id: vehicleId, ...out };
 }
 
